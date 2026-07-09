@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="https://readme-typing-svg.demolab.com?font=Poppins&size=32&duration=3000&pause=1000&color=000000&center=true&vCenter=true&width=600&lines=Virtual+Course;Learn+Anything%2C+Anywhere;Full+Stack+MERN+Platform" alt="Typing SVG animated banner" />
+![Header](https://capsule-render.vercel.app/api?type=waving&color=0:0f0c29,50:302b63,100:24243e&height=220&section=header&text=VIRTUAL%20COURSES&fontSize=52&fontColor=ffffff&animation=fadeIn&fontAlignY=35&desc=Learn.%20Teach.%20Grow.%20—%20A%20Full%20Stack%20Online%20Learning%20Platform&descAlignY=58&descSize=17&descColor=E0E0E0)
 
-<br/>
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&duration=2500&pause=900&color=6C63FF&center=true&vCenter=true&width=650&lines=MERN+Stack+E-Learning+Platform;Course+Creation+%2B+Sales+%2B+Payments;AI-Powered+Course+Search;Built+by+Biswajit+Pattanaik" alt="Typing SVG" />
 
-![Banner](https://capsule-render.vercel.app/api?type=waving&color=0:000000,100:434343&height=180&section=header&text=VIRTUAL%20COURSES&fontSize=48&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=An%20Online%20Learning%20%26%20Course%20Selling%20Platform&descAlignY=58&descSize=18)
+<br/><br/>
 
 <p>
   <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black&style=for-the-badge" />
@@ -12,7 +12,6 @@
   <img src="https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/TailwindCSS-4-06B6D4?logo=tailwindcss&logoColor=white&style=for-the-badge" />
 </p>
-
 <p>
   <img src="https://img.shields.io/badge/Vercel-Frontend-black?logo=vercel&style=for-the-badge" />
   <img src="https://img.shields.io/badge/Render-Backend-46E3B7?logo=render&logoColor=black&style=for-the-badge" />
@@ -20,97 +19,192 @@
   <img src="https://img.shields.io/badge/Razorpay-Payments-0C2451?logo=razorpay&logoColor=white&style=for-the-badge" />
 </p>
 
+<p>
+  <img src="https://img.shields.io/github/stars/Biswajitpa/Virtual-Course?style=for-the-badge&color=6C63FF" />
+  <img src="https://img.shields.io/github/last-commit/Biswajitpa/Virtual-Course?style=for-the-badge&color=6C63FF" />
+  <img src="https://img.shields.io/badge/status-active-success?style=for-the-badge&color=6C63FF" />
+</p>
+
 </div>
 
----
+<br/>
 
-## 📖 About the Project
+## 📖 Overview
 
-**Virtual Courses** is a full-stack **online learning and course-selling platform** where educators can create, publish, and sell courses, and students can browse, purchase, and learn through structured video lectures. The platform supports secure authentication, real-time payments, AI-assisted course search, and a dedicated educator dashboard to manage content — all wrapped in a clean, modern UI.
+**Virtual Courses** is a production-grade **MERN stack e-learning platform** where **educators** create and sell structured video courses, and **students** discover, purchase, and learn from them. It combines secure authentication, cloud media handling, real payment processing, and AI-assisted discovery into one cohesive product — architected the way a real SaaS learning platform would be.
 
-Built as a complete MERN-stack application, this project demonstrates real-world features like role-based access control, cloud media storage, payment gateway integration, and OTP-based password recovery — deployed end-to-end on production infrastructure.
+<br/>
 
----
+## 🏗️ System Architecture
+
+```mermaid
+flowchart TB
+    subgraph Client["🖥️ Client Layer"]
+        A[React + Vite SPA<br/>Deployed on Vercel]
+        A1[Redux Toolkit — State]
+        A2[React Router — SPA Routing]
+        A --> A1
+        A --> A2
+    end
+
+    subgraph Edge["🌐 Network Layer"]
+        B[HTTPS + CORS<br/>Cross-Origin Auth Cookies]
+    end
+
+    subgraph Server["⚙️ Application Layer — Render"]
+        C[Express.js REST API]
+        C1[Auth Middleware<br/>JWT Verification]
+        C2[Multer<br/>File Upload Handler]
+        C3[Route Controllers<br/>auth · user · course · payment · ai · review]
+        C --> C1 --> C3
+        C --> C2 --> C3
+    end
+
+    subgraph Data["🗄️ Data & Storage Layer"]
+        D[(MongoDB Atlas<br/>Users · Courses · Reviews)]
+        E[Cloudinary<br/>Images & Video Assets]
+    end
+
+    subgraph External["🔌 External Services"]
+        F[Firebase Auth<br/>Google Sign-In]
+        G[Razorpay<br/>Payment Gateway]
+        H[Nodemailer<br/>OTP / Email]
+        I[Gemini AI API<br/>Smart Course Search]
+    end
+
+    A -- "Axios REST calls\n(withCredentials)" --> B --> C
+    C3 --> D
+    C2 --> E
+    A -.-> F
+    C3 --> G
+    C3 --> H
+    C3 --> I
+
+    style Client fill:#302b63,color:#fff,stroke:#6C63FF,stroke-width:2px
+    style Edge fill:#1a1a2e,color:#fff,stroke:#6C63FF,stroke-width:2px
+    style Server fill:#16213e,color:#fff,stroke:#6C63FF,stroke-width:2px
+    style Data fill:#0f3460,color:#fff,stroke:#6C63FF,stroke-width:2px
+    style External fill:#24243e,color:#fff,stroke:#6C63FF,stroke-width:2px
+```
+
+<br/>
+
+## 🔄 Authentication Flow
+
+```mermaid
+sequenceDiagram
+    participant U as User (Browser)
+    participant F as Frontend (Vercel)
+    participant B as Backend (Render)
+    participant DB as MongoDB
+
+    U->>F: Enter email + password
+    F->>B: POST /api/auth/login (withCredentials)
+    B->>DB: Find user by email
+    DB-->>B: User document
+    B->>B: bcrypt.compare(password)
+    B->>B: Generate JWT
+    B-->>F: Set-Cookie: token (HttpOnly, Secure, SameSite=None)
+    F-->>U: Redirect to Dashboard
+    U->>F: Navigate to protected route
+    F->>B: GET /api/user/currentuser (cookie auto-sent)
+    B->>B: Verify JWT from cookie
+    B-->>F: 200 OK + user data
+```
+
+<br/>
 
 ## ✨ Key Features
 
-### 👤 Authentication & User Management
-- Secure Signup/Login with hashed passwords (bcrypt) and JWT-based sessions (HTTP-only cookies)
-- Google Sign-In via Firebase Authentication
-- OTP-based Forgot Password / Reset Password flow (email delivery)
-- Editable user profiles with Cloudinary-hosted avatar uploads
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 👤 Authentication & Profile
+- Signup/Login with bcrypt-hashed passwords
+- JWT sessions via secure HTTP-only cookies
+- Google Sign-In (Firebase Auth)
+- OTP-based forgot/reset password via email
+- Editable profile with Cloudinary avatar upload
 
 ### 🎓 Learning Experience
-- Browse all published courses with search and category filters
-- Detailed course view with curriculum, lecture list, and reviews
-- Sequential lecture viewer for enrolled students
-- Course enrollment tracking per user
-- **AI-powered course search** to help students find the right course instantly
-- Star-rating based review & feedback system for courses
+- Browse & search all published courses
+- Rich course detail pages with curriculum preview
+- Sequential lecture player for enrolled students
+- Enrollment tracking per user
+- Star-rating & written reviews per course
+- **AI-powered course search** (Gemini API)
 
-### 🧑‍🏫 Educator Dashboard
-- Role-based access — only users with an **Educator** role can create content
-- Full course creation workflow: course details → lecture creation → publishing
-- Add, edit, and manage lectures within a course
-- Dashboard analytics for created courses and enrollments
+</td>
+<td width="50%" valign="top">
 
-### 💳 Payments
-- Secure course purchases powered by **Razorpay**
-- Order verification and enrollment activation on successful payment
+### 🧑‍🏫 Educator Tools
+- Role-based access — Educator-only routes
+- Course creation → lecture creation → publish flow
+- Edit/manage lectures within a course
+- Personal dashboard of created courses
 
-### 🛡️ Security & Infrastructure
-- CORS-protected REST API with credential-based cross-origin authentication
-- Environment-based secret management for all API keys and credentials
-- Cloud-hosted MongoDB Atlas database
-- Media assets (avatars, thumbnails) stored and served via Cloudinary
+### 💳 Payments & Commerce
+- Razorpay checkout integration
+- Server-side payment verification
+- Automatic enrollment on successful purchase
 
----
+### 🛡️ Engineering
+- CORS-secured cross-origin cookie auth
+- Environment-based secret management
+- Cloud DB (MongoDB Atlas) + Cloud media (Cloudinary)
+
+</td>
+</tr>
+</table>
+
+<br/>
 
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
 |---|---|
-| **Frontend** | React 19, Vite, Redux Toolkit, React Router v7, Tailwind CSS 4 |
-| **Backend** | Node.js, Express.js |
-| **Database** | MongoDB (Mongoose ODM) |
-| **Authentication** | JWT, bcryptjs, Firebase Auth (Google Sign-In) |
+| **Frontend** | React 19 · Vite · Redux Toolkit · React Router v7 · Tailwind CSS 4 |
+| **Backend** | Node.js · Express.js |
+| **Database** | MongoDB + Mongoose |
+| **Auth** | JWT · bcryptjs · Firebase (Google OAuth) |
 | **File Uploads** | Multer + Cloudinary |
 | **Payments** | Razorpay |
-| **Email/OTP** | Nodemailer |
-| **AI Search** | Google Gemini API |
-| **Deployment** | Vercel (Frontend) · Render (Backend) |
+| **Email** | Nodemailer (OTP delivery) |
+| **AI** | Google Gemini API |
+| **Hosting** | Vercel (Frontend) · Render (Backend) |
 
----
+<br/>
 
 ## 📂 Project Structure
 
 ```
 Virtual-Course/
 ├── backend/
-│   ├── configs/          # DB, Cloudinary, Mail, Token configs
-│   ├── controllers/      # Route logic (auth, user, course, payment, ai, review)
-│   ├── middlewares/      # Auth guard, Multer file handling
-│   ├── models/           # Mongoose schemas
-│   ├── routes/           # Express route definitions
-│   └── index.js          # Server entry point
+│   ├── configs/          → DB, Cloudinary, Mail, Token setup
+│   ├── controllers/      → auth, user, course, payment, ai, review logic
+│   ├── middlewares/      → isAuth guard, Multer upload handler
+│   ├── models/           → Mongoose schemas
+│   ├── routes/           → Express route definitions
+│   └── index.js          → Server entry point
 │
 └── frontend/
     ├── src/
-    │   ├── pages/         # Route-level pages (Login, SignUp, Dashboard, etc.)
-    │   ├── pages/admin/    # Educator dashboard pages
-    │   ├── components/     # Reusable UI components
-    │   ├── customHooks/    # Data-fetching hooks
-    │   ├── redux/          # Redux Toolkit slices
-    │   └── App.jsx          # Root component & route definitions
-    └── vercel.json          # SPA routing config
+    │   ├── pages/           → Login, SignUp, Dashboard, ViewCourse, etc.
+    │   ├── pages/admin/      → Educator dashboard pages
+    │   ├── components/       → Reusable UI components
+    │   ├── customHooks/      → Data-fetching hooks
+    │   ├── redux/             → Redux Toolkit slices
+    │   └── App.jsx             → Root routes
+    └── vercel.json              → SPA rewrite config
 ```
 
----
+<br/>
 
 ## ⚙️ Environment Variables
 
-**Backend `.env`**
-```
+**`backend/.env`**
+```env
 PORT=8000
 MONGODB_URL=
 JWT_SECRET=
@@ -124,59 +218,57 @@ RAZORPAY_SECRET=
 GEMINI_API_KEY=
 ```
 
-**Frontend `.env`**
-```
+**`frontend/.env`**
+```env
 VITE_API_URL=
 ```
 
-> ⚠️ Never commit `.env` files. Ensure they are listed in `.gitignore`.
+> ⚠️ Never commit `.env` files — confirm they're listed in `.gitignore` before pushing.
 
----
+<br/>
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
 ```bash
+# 1. Clone
 git clone https://github.com/Biswajitpa/Virtual-Course.git
 cd Virtual-Course
-```
 
-### 2. Setup Backend
-```bash
+# 2. Backend
 cd backend
 npm install
 npm start
-```
 
-### 3. Setup Frontend
-```bash
+# 3. Frontend (in a new terminal)
 cd frontend
 npm install
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`, connecting to the backend at `http://localhost:8000`.
+Frontend runs at `http://localhost:5173`, connecting to backend at `http://localhost:8000`.
 
----
+<br/>
 
-## 🌐 Deployment
+## 🌐 Live Deployment
 
-| Service | Platform |
-|---|---|
-| Frontend | [Vercel](https://vercel.com) |
-| Backend | [Render](https://render.com) |
-| Database | MongoDB Atlas |
-| Media Storage | Cloudinary |
+| Service | Platform | Purpose |
+|---|---|---|
+| Frontend | **Vercel** | React SPA hosting |
+| Backend | **Render** | REST API server |
+| Database | **MongoDB Atlas** | Persistent data storage |
+| Media | **Cloudinary** | Avatar & course asset storage |
 
----
+<br/>
 
 ## 🗺️ Roadmap
 
-- [ ] Live doubt-solving / discussion forums
-- [ ] Certificate generation on course completion
-- [ ] Course progress tracking with resume-from-last-lecture
+- [ ] Course completion certificates
+- [ ] Resume-from-last-lecture progress tracking
+- [ ] Discussion forum per course
 - [ ] Wishlist & course bundles
 - [ ] Multi-language support
+
+<br/>
 
 ---
 
@@ -184,16 +276,16 @@ The app will be available at `http://localhost:5173`, connecting to the backend 
 
 ## 👨‍💻 Developed By
 
+<img src="https://github.com/Biswajitpa.png" width="100" style="border-radius:50%" />
+
 ### **Biswajit Pattanaik**
 
-<a href="https://github.com/Biswajitpa">
-  <img src="https://img.shields.io/badge/GitHub-Biswajitpa-181717?logo=github&style=for-the-badge" />
-</a>
+<a href="https://github.com/Biswajitpa"><img src="https://img.shields.io/badge/GitHub-Biswajitpa-181717?logo=github&style=for-the-badge" /></a>
 
 <br/><br/>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:434343,100:000000&height=100&section=footer" />
+⭐ **If this project helped or inspired you, consider giving it a star!** ⭐
 
-⭐ If you found this project interesting, consider giving it a star on GitHub!
+![Footer](https://capsule-render.vercel.app/api?type=waving&color=0:24243e,50:302b63,100:0f0c29&height=120&section=footer)
 
 </div>
