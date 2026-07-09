@@ -9,16 +9,22 @@ import courseRouter from "./routes/courseRoute.js"
 import paymentRouter from "./routes/paymentRoute.js"
 import aiRouter from "./routes/aiRoute.js"
 import reviewRouter from "./routes/reviewRoute.js"
-dotenv.config()
 
+dotenv.config()
 let port = process.env.PORT
 let app = express()
+
 app.use(express.json())
 app.use(cookieParser())
+
 app.use(cors({
-    origin:"http://localhost:5173",
-    credentials:true
+    origin: [
+        "http://localhost:5173",
+        "https://virtual-course-psi.vercel.app" // your production Vercel URL
+    ],
+    credentials: true
 }))
+
 app.use("/api/auth", authRouter)
 app.use("/api/user", userRouter)
 app.use("/api/course", courseRouter)
@@ -26,13 +32,11 @@ app.use("/api/payment", paymentRouter)
 app.use("/api/ai", aiRouter)
 app.use("/api/review", reviewRouter)
 
-
-app.get("/" , (req,res)=>{
+app.get("/", (req, res) => {
     res.send("Hello From Server")
 })
 
-app.listen(port , ()=>{
+app.listen(port, () => {
     console.log("Server Started")
     connectDb()
 })
-
