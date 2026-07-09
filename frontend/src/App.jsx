@@ -16,7 +16,6 @@ import AddCourses from './pages/admin/AddCourses'
 import CreateCourse from './pages/admin/CreateCourse'
 import CreateLecture from './pages/admin/CreateLecture'
 import EditLecture from './pages/admin/EditLecture'
-
 import getCouseData from './customHooks/getCouseData'
 import ViewCourse from './pages/ViewCourse'
 import ScrollToTop from './components/ScrollToTop'
@@ -26,12 +25,11 @@ import ViewLecture from './pages/ViewLecture'
 import SearchWithAi from './pages/SearchWithAi'
 import getAllReviews from './customHooks/getAllReviews'
 
-export const serverUrl = "http://localhost:8000"
+export const serverUrl = import.meta.env.VITE_API_URL || "http://localhost:8000"
 
 function App() {
   
   let {userData} = useSelector(state=>state.user)
-
   getCurrentUser()
   getCouseData()
   getCreatorCourseData()
@@ -62,10 +60,8 @@ function App() {
         <Route path='/editlecture/:courseId/:lectureId' element={userData?.role === "educator"?<EditLecture/>:<Navigate to={"/signup"}/>}/>
         <Route path='/forgotpassword' element={<ForgotPassword/>}/>
          </Routes>
-
          </>
    
   )
 }
-
 export default App
