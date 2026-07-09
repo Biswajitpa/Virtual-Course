@@ -18,10 +18,17 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "https://virtual-course-psi.vercel.app" // your production Vercel URL
-    ],
+    origin: function (origin, callback) {
+        if (
+            !origin ||
+            origin === "http://localhost:5173" ||
+            /^https:\/\/virtual-course.*\.vercel\.app$/.test(origin)
+        ) {
+            callback(null, true)
+        } else {
+            callback(new Error("Not allowed by CORS"))
+        }
+    },
     credentials: true
 }))
 
